@@ -1,3 +1,22 @@
+<?php 
+    session_start();
+
+    if(isset($_SESSION["user"])){
+        switch ($_SESSION["user"]["idCargo"]) {
+            case 1:
+                header("location:indexLogin.php");
+                break;
+            case 2:
+                header("location:indexAc.php");
+                break;
+            case 3:
+                header("location:indexVen.php");
+                break;
+        }
+        
+    }
+
+?>
 <!doctype html>
 <html lang="en">
     <head>

@@ -41,7 +41,9 @@
                         $correo = trim($_POST["correo"]);
                         $dui = trim($_POST["dui"]);
                         $idCargo = trim($_POST["idCargo"]);
+                        $idEstadoEmpleado = trim($_POST["idEstadoEmpleado"]);
                         $contra = trim($_POST["contra"]);
+                        $direccion = trim($_POST["direccion"]);
                         
                         $contrasena_hash = password_hash($contra, PASSWORD_BCRYPT);
 
@@ -53,7 +55,7 @@
                             $statement = null;
                             if(!empty($contra))
                             {
-                                $sql = "UPDATE empleado SET dui = ?, nombres = ?, apellidos = ?, correo = ?, idCargo = ?, telefono = ?, contra = ?  WHERE idEmpleado = ?";
+                                $sql = "UPDATE empleado SET dui = ?, nombres = ?, apellidos = ?, correo = ?, idCargo = ?, telefono = ?, contra = ?, idEstadoEmpleado=?, direccion=?  WHERE idEmpleado = ?";
                                 $statement = $dbconnection->prepare($sql);
                                 $statement->bindParam(1,$dui);
                                 $statement->bindParam(2,$nombres);
@@ -62,11 +64,14 @@
                                 $statement->bindParam(5,$idCargo);
                                 $statement->bindParam(6,$telefono);
                                 $statement->bindParam(7,$contrasena_hash);
-                                $statement->bindParam(8,$idEmpleado);
+                                $statement->bindParam(8,$idEstadoEmpleado);
+                                $statement->bindParam(9,$direccion);
+                                $statement->bindParam(10,$idEmpleado);
+                                
                             }
                             else
                             {
-                                $sql = "UPDATE empleado SET dui = ?, nombres = ?, apellidos = ?, correo = ?, idCargo = ?, telefono = ? WHERE idEmpleado = ?";
+                                $sql = "UPDATE empleado SET dui = ?, nombres = ?, apellidos = ?, correo = ?, idCargo = ?, telefono = ?, idEstadoEmpleado=?, direccion=?  WHERE idEmpleado = ?";
                                 $statement = $dbconnection->prepare($sql);
                                 $statement->bindParam(1,$dui);
                                 $statement->bindParam(2,$nombres);
@@ -74,7 +79,9 @@
                                 $statement->bindParam(4,$correo);
                                 $statement->bindParam(5,$idCargo);
                                 $statement->bindParam(6,$telefono);
-                                $statement->bindParam(7,$idEmpleado);
+                                $statement->bindParam(7,$idEstadoEmpleado);
+                                $statement->bindParam(8,$direccion);
+                                $statement->bindParam(9,$idEmpleado);
                             }
                             
                             
@@ -134,8 +141,10 @@
                         $statement->execute();
 
                         $sql2 = "SELECT * FROM cargo";
-                    
                         $result = $dbconnection->query($sql2);
+
+                        $sql3 = "SELECT * FROM estadoempleado";
+                        $result3 = $dbconnection->query($sql3);
 
                         if($statement->rowCount() == 1)
                         {
@@ -143,7 +152,7 @@
 
                         ?>
                             <form method="POST">
-                                <input type="hidden" class="form-control" id="idEmpleado" name="idEmpleado" placeholder="00000000-0" value="<?php echo $row['idEmpleado'];?>">
+                                <input type="hidden" class="form-control" id="idEmpleado" name="idEmpleado" placeholder="00000000-0" readOnly value="<?php echo $row['idEmpleado'];?>">
                                 <div class="form-group">
                                     <label for="nombres">Nombres:</label>
                                     <input type="text" class="form-control" id="nombres" name="nombres" value="<?php echo $row['nombres'];?>">
@@ -186,13 +195,36 @@
                                         }
                                         ?>
                                     </select>
-                                    
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="idEstadoEmpleado">Estado Empleado: </label>
+                                    <select class="form-control" id="idEstadoEmpleado" name="idEstadoEmpleado">
+                                        <?php
+                                        foreach($result3 as $fila){
+                                            if($fila["idEstadoEmpleado"] == $row["idEstadoEmpleado"])
+                                            {
+                                                echo "<option value='" . $fila["idEstadoEmpleado"] . "' selected>" . $fila["estadoEmpleado"] . "</option>";    
+                                            }
+                                            else
+                                            {
+                                                echo "<option value='" . $fila["idEstadoEmpleado"] . "'>" . $fila["estadoEmpleado"] . "</option>";
+                                            }
+                                            
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="contrasena">Contraseña: </label>
                                     <input type="password" class="form-control" id="contra" name="contra" >
                                     <small>Si deja la contraseña vacía, no se actualizará</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="dui">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion" name="direccion">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary" name="enviar"><i class="fa fa-edit"></i> Actualizar empleado</button>
