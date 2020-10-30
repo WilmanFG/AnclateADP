@@ -270,6 +270,7 @@
                                             else
                                             {
                                                 echo "<option value='" . $fila["idEstadoEmpleado"] . "'>" . $fila["estadoEmpleado"] . "</option>";
+                                                
                                             }
                                             
                                         }
