@@ -211,7 +211,6 @@
                         if($statement->rowCount() == 1)
                         {
                             $row=$statement->fetch();
-
                         ?>
                             <form method="POST">
                                 <input type="hidden" class="form-control" id="idEmpleado" name="idEmpleado" readOnly value="<?php echo $row['idEmpleado'];?>">
@@ -240,7 +239,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="idCargo">Cargo: </label>
+                                    <label for="idCargo">Cargo del empleado: </label>
                                     <select class="form-control" id="idCargo" name="idCargo">
                                         <?php
                                         foreach($result as $fila){

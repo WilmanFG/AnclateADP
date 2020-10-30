@@ -41,7 +41,7 @@ function subirFoto(){
  $name = $_FILES["archivos"]["name"];
  $size = $_FILES["archivos"]["size"];
  //echo "<h3>$size bytes</h3>";
- if($size > 2621440){
+ if($size > 7340032){
  echo "<h3>El tamaño del archivo es superior al admitido por el
 servidor</h3><br>";
  echo "<a href=\"verProductos.php\">Intentar de nuevo</a>";
@@ -61,8 +61,7 @@ servidor</h3><br>";
  //la carpeta files/.
  if(move_uploaded_file($tmp_name, PATH . "/" . utf8_decode($name))){
 
- }
- else{
+ }else{
  switch($_FILES['archivos']['error']){
  //No hay error, pero puede ser un ataque
 case UPLOAD_ERR_OK:
