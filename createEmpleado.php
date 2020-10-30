@@ -65,7 +65,6 @@
 
                                 echo $message;
                         }else{
-
                             
                             if(!preg_match($regexNombres,$nombres)){
                                 array_push($errores, "Nombres");    

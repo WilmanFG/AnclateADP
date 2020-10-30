@@ -236,7 +236,6 @@
 						</div>
 						<div class="section-title text-center">
 							<button type="button" class="btn btn-primary btn-lg btn-block">Finalizar cotización</button>
-							<button type="button" class="btn btn-secondary btn-lg btn-block">Cancelar cotización</button>
 						</div>
 					</div>
 					<!-- /Order Details -->
