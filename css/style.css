@@ -86,6 +86,9 @@ ul, ol {
   list-style: none
 }
 
+#contraError{
+  color: red;
+}
 /*----------------------------*\
 	Buttons
 \*----------------------------*/
