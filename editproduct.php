@@ -32,71 +32,228 @@
                     include_once "classes/Database.class.php";
                     $exception = 0;
                     if(isset($_POST["enviar"])){
-
+                        function subirFoto($imgV){
+                            define("PATH", "img");
+                         //Verificar que la matriz asociativa $_FILES["foto"] haya sido definida
+                         if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_FILES["archivos"])){
+                         //De ser así se procesa cada uno de los archivos.
+                         //Para poder hacerlo es conveniente obtener la cantidad
+                         //de elementos que tiene matriz $_FILES["archivos"]
+                         
+                         //este for recorre la matriz $_FILES
                         
+                         //Las propiedades definidas para cada archivo son:
+                         //1. 'tmp_dir': directorio temporal en el servidor donde se aloja el archivo
+                         //2. 'name': nombre original del archivo seleccionado por el usuario
+                         //3. 'size': tamaño en bytes del archivo
+                         //Para recorrer uno a uno los archivos que se hayan decidido subir al servidor
+                         //se utilizará el contador $i. En caso de que solo se suba un archivo el ciclo
+                         //se ejecutará una sola vez.
+                         $tmp_name = $_FILES["archivos"]["tmp_name"];
+                         $name = $_FILES["archivos"]["name"];
+                         $size = $_FILES["archivos"]["size"];
+                         //echo "<h3>$size bytes</h3>";
+                         if($size > 7340032){
+                         echo "<h3>El tamaño del archivo es superior al admitido por el
+                        servidor</h3><br>";
+                        $message = "<div class='alert alert-danger' role='alert'>";
+                        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                        $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                        $message .= "Descripción: El tamaño del archivo es superior al admitido por el
+                        servidor <br>";
+                        
+                        $message .= "</div>";
+
+                        echo $message;
+                         }
+                        
+                         //Verificar la carpeta en el servidor donde se alojarán los archivos
+                         //que se desean subir. Si no existe esta carpeta se creará y si no
+                         //es posible crearla se lanzará un error y se terminará el script
+                         if(!file_exists(PATH)){
+                         //Crear el directorio y asignar los permisos al mismo
+                         if(!mkdir(PATH, 0777, true)) {
+                         die('No se ha podido crear el directorio');
+                         }
+                         }
+                         //Una vez que es procesado cada archivo correctamente, se moverá
+                         //a una carpeta específica en el servidor, en este caso se usará
+                         //la carpeta files/.
+                         if(move_uploaded_file($tmp_name, PATH . "/" . utf8_decode($name))){
+                            unlink(PATH."/".$imgV);
+                         }
+                         else{
+                         switch($_FILES['archivos']['error']){
+                         //No hay error, pero puede ser un ataque
+                        case UPLOAD_ERR_OK:
+                         
+                        $message = "<div class='alert alert-danger' role='alert'>";
+                        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                        $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                        $message .= "Descripción: Se ha producido un problema con la carga del archivo.<br>";
+                        
+                        $message .= "</div>";
+
+                        echo $message;
+                        break;
+                        //El tamaño del archivo es mayor que upload_max_filesize
+                        case UPLOAD_ERR_INI_SIZE:
+                        $message = "<div class='alert alert-danger' role='alert'>";
+                        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                        $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                        $message .= "Descripción: El archivo es demasiado grande, no se puede cargar.<br>";
+                        
+                        $message .= "</div>";
+
+                        echo $message;
+                        break;
+                        //El tamaño del archivo es mayor que MAX_FILE_SIZE
+                        case UPLOAD_ERR_FORM_SIZE:
+                            $message = "<div class='alert alert-danger' role='alert'>";
+                            $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                            $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                            $message .= "Descripción: El archivo es demasiado grande, no se puede cargar.<br>";
+                            
+                            $message .= "</div>";
+    
+                            echo $message;
+                        break;
+                        //Solo se ha cargado parte del archivo
+                        case UPLOAD_ERR_PARTIAL:
+                            $message = "<div class='alert alert-danger' role='alert'>";
+                            $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                            $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                            $message .= "Descripción: Solo se ha cargado una parte del archivo.<br>";
+                            
+                            $message .= "</div>";
+    
+                            echo $message;
+                        break;
+                        //No hay directorio temporal
+                        case UPLOAD_ERR_NO_TMP_DIR:
+                        
+                        $message = "<div class='alert alert-danger' role='alert'>";
+                        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                        $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                        $message .= "Descripción: Problema con el directorio temporal. Parece que no
+                        existe.<br>";
+                        
+                        $message .= "</div>";
+
+                        echo $message;
+                        break;
+                        default:
+                        $message = "<div class='alert alert-danger' role='alert'>";
+                        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                        $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                        $message .= "Se ha producido un problema al intentar mover el archivo "
+                        . $name . "<br>";
+                        
+                        $message .= "</div>";
+
+                        echo $message;
+                        
+                        break;
+                        }
+                        }
+                        }
+                        }
+                        
+                        
+
                         $idProducto = trim($_POST["idProducto"]);
                         $nombre = trim($_POST["nombre"]);
                         $descripcion = trim($_POST["descripcion"]);
                         $stock = trim($_POST["stock"]);
                         $idTipoProducto = trim($_POST["idTipoProducto"]);
                         $idMedida = trim($_POST["idMedida"]);
-
+                        $imgV = trim($_POST["ima"]);
+                        $name = $_FILES["archivos"]["name"];
                         $database = new Database();
                         $dbconnection = $database->create_connection();
 
-                        try{
-                            $sql="";
-                            $statement = null;
-                            
-                                $sql = "UPDATE producto SET nombre = ?, descripcion = ?, stock = ?, idTipoProducto = ?, idMedida = ? WHERE idProducto = ?";
-                                $statement = $dbconnection->prepare($sql);
-                                $statement->bindParam(1,$nombre);
-                                $statement->bindParam(2,$descripcion);
-                                $statement->bindParam(3,$stock);
-                                $statement->bindParam(4,$idTipoProducto);
-                                $statement->bindParam(5,$idMedida);
-                               
-                                $statement->bindParam(6,$idProducto);
-                          
-                            
-                            
-                            $statement->execute();
+                        if(strlen($name) > 0){
+                            subirFoto($imgV);
                         }
-                        catch(PDOException $e)
-                        {
+
+                        if(strlen($nombre) == 0 || strlen($nombre) == 0 || strlen($descripcion) == 0 || $stock < 0 ){
                             $message = "<div class='alert alert-danger' role='alert'>";
-                            $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
-                            $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
-                            $message .= "Descripción: " . $e->getMessage() . " <br>";
-                            $message .= "Código de error: " . $e->getCode() . "</p>";
-                            $message .= "</div>";
+                            $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Usuario no creado</h4>";
+                                $message .= "<p>Datos Requeridos Vacíos.</p>";
+                                $message .= "</div>";
 
-                            echo $message;
-                            $exception = 1;
-                        }
-                        if($statement->rowCount() == 1)
-                        {
-                            $message = "<div class='alert alert-success' role='alert'>";
-                            $message .= "<h4 class='alert-heading'><i class='fa fa-user-edit'></i> Producto actualizado</h4>";
-                            $message .= "<p>Producto actualizado exitosamente.</p>";
-                            $message .= "</div>";
-
-                            echo $message;
-                        }
-                        else
-                        {
-                            if($exception==0)
+                                echo $message;
+                        }else{
+                            try{
+                                $sql="";
+                                $statement = null;
+                                
+                                if(strlen($name) > 0){
+                                    $sql = "UPDATE producto SET nombre = ?, descripcion = ?,imagen = ?, stock = ?, idTipoProducto = ?, idMedida = ? WHERE idProducto = ?";
+                                    $statement = $dbconnection->prepare($sql);
+                                    $statement->bindParam(1,$nombre);
+                                    $statement->bindParam(2,$descripcion);
+                                    $statement->bindParam(3,$name);
+                                    $statement->bindParam(4,$stock);
+                                    $statement->bindParam(5,$idTipoProducto);
+                                    $statement->bindParam(6,$idMedida);
+                                   
+                                    $statement->bindParam(7,$idProducto);
+                                }else{
+                                    $sql = "UPDATE producto SET nombre = ?, descripcion = ?, stock = ?, idTipoProducto = ?, idMedida = ? WHERE idProducto = ?";
+                                    $statement = $dbconnection->prepare($sql);
+                                    $statement->bindParam(1,$nombre);
+                                    $statement->bindParam(2,$descripcion);
+                                    $statement->bindParam(3,$stock);
+                                    $statement->bindParam(4,$idTipoProducto);
+                                    $statement->bindParam(5,$idMedida);
+                                   
+                                    $statement->bindParam(6,$idProducto);
+                                }
+                                    
+                              
+                                
+                                
+                                $statement->execute();
+                            }
+                            catch(PDOException $e)
                             {
                                 $message = "<div class='alert alert-danger' role='alert'>";
                                 $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
                                 $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
-                                $message .= "Descripción: " . $dbconnection->errorInfo()[2] . " <br>";
-                                $message .= "Código de error: " . $dbconnection->errorInfo()[0] . "</p>";
+                                $message .= "Descripción: " . $e->getMessage() . " <br>";
+                                $message .= "Código de error: " . $e->getCode() . "</p>";
+                                $message .= "</div>";
+    
+                                echo $message;
+                                $exception = 1;
+                            }
+                            if($statement->rowCount() == 1)
+                            {
+                                $message = "<div class='alert alert-success' role='alert'>";
+                                $message .= "<h4 class='alert-heading'><i class='fa fa-user-edit'></i> Producto actualizado</h4>";
+                                $message .= "<p>Producto actualizado exitosamente.</p>";
                                 $message .= "</div>";
     
                                 echo $message;
                             }
+                            else
+                            {
+                                if($exception==0)
+                                {
+                                    $message = "<div class='alert alert-danger' role='alert'>";
+                                    $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no actualizado</h4>";
+                                    $message .= "<p>Ocurrió un error procesando la consulta y no se pudo actualizar el producto. Por favor, inténtelo de nuevo. <br>";
+                                    $message .= "Descripción: " . $dbconnection->errorInfo()[2] . " <br>";
+                                    $message .= "Código de error: " . $dbconnection->errorInfo()[0] . "</p>";
+                                    $message .= "</div>";
+        
+                                    echo $message;
+                                }
+                            }
                         }
+
+                        
 
                         $database->close_connection($dbconnection);
 
@@ -126,24 +283,40 @@
                             $row=$statement->fetch();
 
                         ?>
-                            <form method="POST">
-                                <input type="hidden" class="form-control" id="idProducto" name="idProducto" value="<?php echo $row['idProducto'];?>">
-                                <div class="form-group">
-                                    <label for="producto">Producto:</label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $row['nombre'];?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="descripcion">Descripción: </label>
-                                    <input type="text" class="form-control" id="descripcion" name="descripcion"  value="<?php echo $row['descripcion'];?>">
-                                </div>
+                            <form class="contact100-form validate-form"  method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="ima" name="ima" value="<?php echo $row['imagen'];?>">
+                        <div class="form-group">
+                            <label for="idProducto">ID Producto: </label>
+                            <input type="text" class="form-control" id="idProducto" readOnly name="idProducto" value="<?php echo $row['idProducto'];?>">
+                        </div>
 
+                        <div class="form-group">
+                            <label for="nombres">Nombre: </label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $row['nombre'];?>">
+                        </div>
 
-                                <div class="form-group">
-                                    <label for="stock">Stock: </label>
-                                    <input type="stock" class="form-control" id="stock" name="stock" value="<?php echo $row['stock'];?>">
-                                </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción: </label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" value="<?php echo $row['descripcion'];?>">
+                        </div>
 
-                                <div class="form-group">
+                        <div class="wrap-input100 bg1">
+                        
+                            <span class="label-input100">Subir Imagen</span>
+                            <br>
+                            <img src="img/ <?php echo $row['imagen'];?>" height="200" width="200"/>
+                            <br>
+                            <input type="file" name="archivos" id="uploadBtn0" class="input100">
+                            
+                        </div>
+
+                        <br>
+                        <div class="form-group">
+                            <label for="stock">Stock: </label>
+                            <input type="number" min="0" step="1" class="form-control" id="stock" name="stock" value="<?php echo $row['stock'];?>">
+                        </div>
+
+                        <div class="form-group">
                             <label for="idTipoProducto">Categoría: </label>
                             <select class="form-control" id="idTipoProducto" name="idTipoProducto">
                                 <?php
@@ -175,8 +348,9 @@
                             
                         </div>
 
-                                <button type="submit" class="btn btn-primary" name="enviar"><i class="fa fa-edit"></i> Actualizar producto</button>
-                            </form>
+
+                        <button type="submit" class="btn btn-primary" name="enviar"><i class="fa fa-plus"></i> Agregar producto</button>
+                    </form>
                         <?php
                         }
                         else

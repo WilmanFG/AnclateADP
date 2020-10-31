@@ -103,8 +103,7 @@
                         </div>
 
 
-                        <button type="submit" class="btn btn-primary" name="enviar"><i class="fa fa-plus"></i> Agregar usuario</button>
-                        <button type="reset" class="btn btn-warning"><i class="fa fa-ban"></i> Limpiar formulario</button>
+                        <button type="submit" class="btn btn-primary" name="enviar"><i class="fa fa-plus"></i> Agregar producto</button>
                     </form>
                     <?php
                     }
