@@ -15,7 +15,7 @@
 
         $database = new Database();
         $dbconnection = $database->create_connection();
-        
+
 
         $sql = "SELECT * FROM empleado INNER JOIN cargo ON empleado.idCargo = cargo.idCargo WHERE empleado.correo = :correo";
         $statement = $dbconnection->prepare($sql);
@@ -36,19 +36,45 @@
                 $database->close_connection($dbconnection);
                 header("location:log.php?e=2");
             }
-        
 
-            
+
+
         }
         else
         {
             $database->close_connection($dbconnection);
             header("location:log.php?e=3");
-            
+
         }
 
-        
+
+        if($statement->rowCount() == 2)
+        {
+            $row=$statement->fetch();
+            if(password_verify($post_contra, $row["contra"]))
+            {
+                $_SESSION["user"] = $row;
+                $database->close_connection($dbconnection);
+                header("location:indexVendedor.php");
+            }
+            else
+            {
+                $database->close_connection($dbconnection);
+                header("location:log.php?e=1");
+            }
+
+
+
+        }
+        else
+        {
+            $database->close_connection($dbconnection);
+            header("location:log.php?e=3");
+
+        }
+
+
     }
-    
+
 
 ?>

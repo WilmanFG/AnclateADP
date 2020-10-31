@@ -54,8 +54,8 @@
 
             <ul class="header-links pull-left">
                 <li><a href="#"> <?php echo $_SESSION["user"]["cargo"];?></a></li>
-                <li><a href="indexLogin.php"> Ver Cotizaciones</a></li>
-                
+                <li><a href="indexVendedor.php"> Ver Cotizaciones</a></li>
+
 			</ul>
 
 
