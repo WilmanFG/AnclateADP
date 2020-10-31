@@ -1,4 +1,4 @@
-<?php 
+<?php
     session_start();
 
     if(isset($_SESSION["user"])){
@@ -10,10 +10,10 @@
                 header("location:indexAc.php");
                 break;
             case 3:
-                header("location:indexVen.php");
+                header("location:indexVendedor.php");
                 break;
         }
-        
+
     }
 
 ?>
@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>Login</h1>
-                    
+
                     <br>
                     <?php
                         if(isset($_GET["e"]))
@@ -45,7 +45,7 @@
                                 $message .= "<div class='alert alert-danger' role='alert'>";
                                 $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error</h4>";
                                 $message .= "<p>Todos los campos son obligatorios</p>";
-                                $message .= "</div>";        
+                                $message .= "</div>";
                             }
 
                             if($_GET["e"]==2)
@@ -53,7 +53,7 @@
                                 $message .= "<div class='alert alert-danger' role='alert'>";
                                 $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error</h4>";
                                 $message .= "<p>La contraseña no es válida</p>";
-                                $message .= "</div>";        
+                                $message .= "</div>";
                             }
 
                             if($_GET["e"]==3)
@@ -61,13 +61,13 @@
                                 $message .= "<div class='alert alert-danger' role='alert'>";
                                 $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error</h4>";
                                 $message .= "<p>El Usuario no es válido</p>";
-                                $message .= "</div>";        
+                                $message .= "</div>";
                             }
                             echo $message;
                         }
-                        
 
-                        
+
+
                     ?>
                     <div class="card">
                         <h5 class="card-header">Login</h5>
@@ -85,13 +85,13 @@
                             </form>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
         </div>
 
-        
+
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
