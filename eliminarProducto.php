@@ -23,13 +23,22 @@ if(isset($_POST["idProducto"])){
     $response = null;
     try
     {
-
+        $sql2 = "SELECT * FROM producto WHERE idProducto = ?";
+        $statement2 = $dbconnection->prepare($sql2);
+        $statement2->bindParam(1,$idProducto);
+        $statement2->execute();
     
         $sql = "DELETE FROM producto WHERE idProducto = ?";
         $statement = $dbconnection->prepare($sql);
         $statement->bindParam(1,$idProducto);
         $statement->execute();
 
+        if($statement2->rowCount()>0)
+        {
+            $row = $statement2->fetch();
+        $img = $row["imagen"];
+        unlink("img/".$img);
+        }
         if($statement->rowCount() == 1)
         {
             
@@ -53,7 +62,7 @@ if(isset($_POST["idProducto"])){
     
     header('Content-Type: application/json');
     echo json_encode($response);    
-
+    
 }
 
 

@@ -61,11 +61,24 @@
 
 
 				
-                <form class="form-inline my-2 my-lg-0">
-                <ul class="header-links pull-right"><li class="nav-item"><a class="nav-link">
-                                    Bienvenido/a <?php echo $_SESSION["user"]["nombres"];?></a></li></ul>
-                                    <li class="nav-item"> <a href="logout.php" class="btn btn-danger my-2 my-sm-0">Salir</a></li>
-                </form>
+            <form class="form-inline my-2 my-lg-0">
+                <ul class="header-links pull-right">
+                    <li class="nav-item"><a class="nav-link">
+                        Bienvenido/a <?php echo $_SESSION["user"]["nombres"];?></a>
+                    </li>
+                    <li class="nav-item"> 
+                        <div class="btn-group" role="group">
+                            <button  type="button" class="btn btn-danger" data-toggle="dropdown">
+                                Usuario
+                            </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="btn btn-secondary" href="perfil.php?id=<?php echo $_SESSION["user"]["idEmpleado"] ?> ">Perfil</a>
+                            <a class="btn btn-secondary" href="logout.php">Cerrar Sesión</a>
+                        </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
                 
                 
 			</div>

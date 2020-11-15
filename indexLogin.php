@@ -58,14 +58,25 @@
                 <li><a href="verEmpleados.php"> Ver Empleados</a></li>
                 <li><a href="verProductos.php"> Ver Productos</a></li>
 			</ul>
-
-
-				
-                <form class="form-inline my-2 my-lg-0">
-                <ul class="header-links pull-right"><li class="nav-item"><a class="nav-link">
-                                    Bienvenido/a <?php echo $_SESSION["user"]["nombres"];?></a></li></ul>
-                                    <li class="nav-item"> <a href="logout.php" class="btn btn-danger my-2 my-sm-0">Salir</a></li>
-                </form>
+			
+			<form class="form-inline my-2 my-lg-0">
+                <ul class="header-links pull-right">
+                    <li class="nav-item"><a class="nav-link">
+                        Bienvenido/a <?php echo $_SESSION["user"]["nombres"];?></a>
+                    </li>
+                    <li class="nav-item"> 
+                        <div class="btn-group" role="group">
+                            <button  type="button" class="btn btn-danger" data-toggle="dropdown">
+                                Usuario
+                            </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="btn btn-secondary" href="perfil.php?id=<?php echo $_SESSION["user"]["idEmpleado"] ?> ">Perfil</a>
+                            <a class="btn btn-secondary" href="logout.php">Cerrar Sesión</a>
+                        </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
                 
                 
 			</div>
@@ -151,7 +162,12 @@
 						</div>
 						<div class="order-summary">
 						<div class="order-col">
-						<?php
+						<table class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">Vendedor:</th>
+								
+								<?php
 								$database = new Database();
 								$dbconnection = $database->create_connection();
 								if(!empty($_GET["id"])){
@@ -170,32 +186,24 @@
 										//Si hay datos, vamos a obtener el resultado en forma de objeto
 										//Cada fila será una propiedad en el objeto $row
 										foreach($statement as $fila){
-											echo"<div class='order-col'>";
-											echo"<div><strong>Vendedor:<strong></div>";
-											echo"<div><strong>".$fila["nombres"]." ".$fila["apellidos"]."</strong></div>";
-											echo"</div>";
+
+											echo "<th scope='col'>".$fila["nombres"]." ".$fila["apellidos"]."</th>";
 										}
 										
 									}
-									else
-									{
-										
-									}
-								}else{
-								
 								}
 								$database->close_connection($dbconnection);
 
 							?>
-							</div>
-							<div class="order-col">
-								<div><strong>PRODUCTOS</strong></div>
-								<div><strong>CANTIDAD</strong></div>
-							</div>
-							<div class="order-products">
-							<?php
-								
-
+							</tr>
+							<tr>
+								<th scope="col">PRODUCTO</th>
+								<th scope="col">CANTIDAD</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php
+							
 								$database = new Database();
 								$dbconnection = $database->create_connection();
 								if(!empty($_GET["id"])){
@@ -214,10 +222,10 @@
 										//Si hay datos, vamos a obtener el resultado en forma de objeto
 										//Cada fila será una propiedad en el objeto $row
 										foreach($statement as $fila){
-											echo"<div class='order-col'>";
-											echo"<div>".$fila["nombre"]."</div>";
-											echo"<div>".$fila["cantidad"]."</div>";
-											echo"</div>";
+											echo "<tr>";
+											echo"<td>".$fila["nombre"]."</td>";
+											echo"<td>".$fila["cantidad"]."</td>";
+											echo "</tr>";
 										}
 										
 									}
@@ -231,8 +239,13 @@
 								$database->close_connection($dbconnection);
 
 							?>
-							
+						</tbody>
+							</table>
+						
 							</div>
+							
+							
+							
 						</div>
 						<div class="section-title text-center">
 							<button type="button" class="btn btn-primary btn-lg btn-block">Finalizar cotización</button>

@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2>Anclate</h2>
-                    <h3>Crear Empleado</h3>
+                    <h3>Crear Producto</h3>
                     
                     <br>
 
@@ -71,7 +71,7 @@
                         <br>
                         <div class="form-group">
                             <label for="stock">Stock: </label>
-                            <input type="text" class="form-control" id="stock" name="stock">
+                            <input type="number" min="1" step="1" class="form-control" id="stock" name="stock">
                         </div>
 
                         <div class="form-group">

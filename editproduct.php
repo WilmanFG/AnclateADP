@@ -159,7 +159,7 @@
                         }
                         }
                         
-                        
+                        $regexNum="/^[+]?([1-9]+)$/";
 
                         $idProducto = trim($_POST["idProducto"]);
                         $nombre = trim($_POST["nombre"]);
@@ -169,6 +169,7 @@
                         $idMedida = trim($_POST["idMedida"]);
                         $imgV = trim($_POST["ima"]);
                         $name = $_FILES["archivos"]["name"];
+                        $errores = array();
                         $database = new Database();
                         $dbconnection = $database->create_connection();
 
@@ -184,6 +185,22 @@
 
                                 echo $message;
                         }else{
+                            if(!preg_match($regexNum,$stock)){
+                                array_push($errores, "Stock debe ser entero positivo");    
+                            }
+                            if(count($errores) > 0){
+                                $message = "<div class='alert alert-danger' role='alert'>";
+                                $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Usuario no creado</h4>";
+                                    $message .= "<p>Campos Ingresados Erroneamente</p>";
+                                    $message .= "<ul>";
+                                    foreach ($errores as $error) {
+                                       $message .= "<li>" .$error. "</li>";
+                                    }
+                                    $message .= "</ul>";
+                                    $message .= "</div>";
+    
+                                    echo $message;
+                            }else{                            
                             try{
                                 $sql="";
                                 $statement = null;
@@ -228,6 +245,7 @@
                                 echo $message;
                                 $exception = 1;
                             }
+                        
                             if($statement->rowCount() == 1)
                             {
                                 $message = "<div class='alert alert-success' role='alert'>";
@@ -251,6 +269,7 @@
                                     echo $message;
                                 }
                             }
+                        }
                         }
 
                         
@@ -313,7 +332,7 @@
                         <br>
                         <div class="form-group">
                             <label for="stock">Stock: </label>
-                            <input type="number" min="0" step="1" class="form-control" id="stock" name="stock" value="<?php echo $row['stock'];?>">
+                            <input type="number" min="1" step="1" class="form-control" id="stock" name="stock" value="<?php echo $row['stock'];?>">
                         </div>
 
                         <div class="form-group">

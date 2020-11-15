@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(!isset($_SESSION["user"])){
+        header("location:log.php");
+    }
+
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -10,12 +18,8 @@
         <script src="https://kit.fontawesome.com/f6e8724f6b.js" crossorigin="anonymous"></script>
         <title>Anclate</title>
     </head>
-<?php
-    session_start();
 
-    if(!isset($_SESSION["user"])){
-        header("location:log.php");
-    }
+<?php    
     include_once "classes/Database.class.php";
 
 	if(isset($_POST["enviar"])){
@@ -60,37 +64,101 @@ servidor</h3><br>";
  //a una carpeta específica en el servidor, en este caso se usará
  //la carpeta files/.
  if(move_uploaded_file($tmp_name, PATH . "/" . utf8_decode($name))){
-
+    ingresoDatos();
  }else{
  switch($_FILES['archivos']['error']){
  //No hay error, pero puede ser un ataque
 case UPLOAD_ERR_OK:
- echo "<p>Se ha producido un problema con la carga del archivo.</p>\n";
+ 
+ echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
+echo "<p>Se ha producido un problema con la carga del archivo.</p>\n";
+echo "</div>";
+echo "</div>";
 break;
 //El tamaño del archivo es mayor que upload_max_filesize
 case UPLOAD_ERR_INI_SIZE:
+
+echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
 echo "<p>El archivo es demasiado grande, no se puede cargar.</p>\n";
+echo "</div>";
+echo "</div>";
 break;
 //El tamaño del archivo es mayor que MAX_FILE_SIZE
 case UPLOAD_ERR_FORM_SIZE:
+
+echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
 echo "<p>El archivo es demasiado grande, no se pudo cargar.</p>\n";
+echo "</div>";
+echo "</div>";
 break;
 //Solo se ha cargado parte del archivo
 case UPLOAD_ERR_PARTIAL:
+
+echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
 echo "<p>Sólo se ha cargado una parte del archivo.</p>\n";
+echo "</div>";
+echo "</div>";
 break;
 //No se ha seleccionado ningún archivo para subir
 case UPLOAD_ERR_NO_FILE:
-echo "<p>Debe elegir un archivo para cargar.</p>\n";
+
+ echo "<div class='container'>";
+ echo "<div class='alert alert-danger col-md-10' role='alert'>";
+ echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+ echo "<span aria-hidden='true'>&times;</span>";
+ echo "</a>";
+ echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
+ echo "<p>No se ha seleccionado ningún archivo para subir.</p>";
+ echo "</div>";
+ echo "</div>";
+ 
 break;
 //No hay directorio temporal
 case UPLOAD_ERR_NO_TMP_DIR:
+
+echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
 echo "<p>Problema con el directorio temporal. Parece que no
 existe</p>\n";
+echo "</div>";
+echo "</div>";
 break;
 default:
+echo "<div class='container'>";
+echo "<div class='alert alert-danger col-md-10' role='alert'>";
+echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+echo "<span aria-hidden='true'>&times;</span>";
+echo "</a>";
+echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
 echo "<p>Se ha producido un problema al intentar mover el archivo "
 . $name . "</p>\n";
+echo "</div>";
+echo "</div>";
+
 break;
 }
 }
@@ -103,23 +171,48 @@ echo "<h3>No se han seleccionado archivos.</h3>";
 function ingresoDatos(){
 
 	if (isset($_FILES["archivos"])){
-		$idProducto = $_POST["idProducto"];
-	$nombre = $_POST["nombre"];
-	$descripcion = $_POST["descripcion"];
-	$stock = $_POST["stock"];
-    $idTipoProducto = $_POST["idTipoProducto"];
-    $idMedida = $_POST["idMedida"];
 
-	$name = $_FILES["archivos"]["name"];
+        $regexNum="/^[+]?([1-9]+)$/";
+    $idProducto = trim($_POST["idProducto"]);
+    $nombre = trim($_POST["nombre"]);
+    $descripcion = trim($_POST["descripcion"]);
+    $stock = trim($_POST["stock"]);
+    $idTipoProducto = trim($_POST["idTipoProducto"]);
+    $idMedida = trim($_POST["idMedida"]);
+    $errores = array();
+    $name = $_FILES["archivos"]["name"];
     
     $database = new Database();
     $dbconnection = $database->create_connection();
     
-    
+    if(strlen($nombre) == 0 || strlen($descripcion) == 0 || $stock < 1 ){
+        $message = "<div class='alert alert-danger' role='alert'>";
+        $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> Producto no creado</h4>";
+            $message .= "<p>Datos Requeridos Vacíos.</p>";
+            $message .= "</div>";
+
+            echo $message;
+    }else{
+        if(!preg_match($regexNum,$stock)){
+            if($stock <= 0){
+                array_push($errores, "Stock debe ser entero positivo");    
+            }
+        }
+        if(count($errores) > 0){
+            $message = "<div class='alert alert-danger' role='alert'>";
+            $message .= "<h4 class='alert-heading'><i class='fa fa-ban'></i> producto no creado</h4>";
+                $message .= "<p>Campos Ingresados Erroneamente</p>";
+                $message .= "<ul>";
+                foreach ($errores as $error) {
+                   $message .= "<li>" .$error. "</li>";
+                }
+                $message .= "</ul>";
+                $message .= "</div>";
+
+                echo $message;
+        }else{           
     try
     {
-
-
         $sql = "INSERT INTO producto (idProducto,nombre,descripcion,imagen,stock,idTipoProducto,idMedida) VALUES (:idProducto,:nombre,:descripcion,:imagen,:stock,:idTipoProducto,:idMedida)";
         $statement = $dbconnection->prepare($sql);
         $statement->bindParam(":idProducto",$idProducto);
@@ -133,16 +226,14 @@ function ingresoDatos(){
 
         if($statement->rowCount() == 1)
         {
-            $message = "<div class='alert alert-success' role='alert'>";
-            $message .= "<h4 class='alert-heading'><i class='fa fa-user-plus'></i> Producto agregado</h4>";
-            $message .= "<p>Producto agregado exitosamente.</p>";
-            $message .= "</div>";
-            $message .="<div class='row'>";
-            $message .="<div class='col-md-12 text-center'>";
+            $message = "<div class='container'>";
+            $message .= "<div class='alert alert-success col-md-10' role='alert'>";
+            $message .= "<h4 class='alert-heading'><i class='fa fa-box'></i> Agregado!</h4>";
+            $message .= "<p>Producto agregado exitosamente.</p>\n";
             $message .="<a href='verProductos.php' class='btn btn-success'><i class='fa fa-arrow-left'></i> Listar productos</a>";
+            $message .= "</div>";
+            $message .= "</div>";
 
-            $message .="</div>";
-            $message .="</div>";
 
             echo $message;
         }
@@ -184,19 +275,26 @@ function ingresoDatos(){
     finally{
         $database->close_connection($dbconnection);    
     }
-    
+}
+}
 	
 	}else{
-		echo"<h1>No llega imagen</h1>";
+        echo "<div class='container'>";
+        echo "<div class='alert alert-danger col-md-10' role='alert'>";
+        echo "<a type='button'href='createProducto.php' class='close' data-dismiss='alert' aria-label='Close'>";
+        echo "<span aria-hidden='true'>&times;</span>";
+        echo "</a>";
+        echo "<h4 class='alert-heading'><i class='fa fa-ban'></i> Error!</h4>";
+        echo "<p>No se ha seleccionado ningún archivo para subir.</p>";
+        echo "</div>";
+        echo "</div>";
 	}
 	
 	
 }
+    subirFoto();
 
 
-
-subirFoto();
-ingresoDatos();
 	}else{
 		header("location: verProductos.php");
 	}
