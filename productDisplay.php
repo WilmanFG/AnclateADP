@@ -9,7 +9,7 @@
 <body>
 <?php
     //Conexion
-    $host = "localhost";
+    $host = "localhost:3308";
     $basededatos = "anclate";
     $usuariodb = "root";
     $clavedb = "";
@@ -23,10 +23,10 @@
     mysqli_close($conexion);
 
     $result = mysqli_num_rows($query);
-    if($result > 0){  
+    if($result > 0){
         while ($data = mysqli_fetch_array($query)){
-            
-        
+
+
 ?>
 <table class="table table-bordered">
               <thead>
@@ -54,12 +54,12 @@
               </tbody>
 </table>
 <?php
-}   
+}
 }
     }
 ?>
 
-      
+
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

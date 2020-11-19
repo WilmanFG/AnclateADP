@@ -193,7 +193,7 @@
 <!-- product -->
 <?php
     //Conexion
-		$host = "localhost:3308";
+    $host = "localhost:3308";
     $basededatos = "anclate";
     $usuariodb = "root";
     $clavedb = "";
@@ -217,7 +217,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-                            <img src="img/<?php echo $data["imagen"]?>" height="200" width="200"/>
+                            <img src="../img/<?php echo $data["imagen"]?>" height="200" width="200"/>
 								<div class="product-label">
 								</div>
 							</div>
