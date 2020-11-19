@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-    if(!isset($_SESSION["user"])){
+      if(!isset($_SESSION["user"])){
         header("location:log.php");
     }
 
@@ -103,8 +103,10 @@
 
                                 $sql = null;
 
-								$sql = "SELECT * FROM cotizacion AS c INNER JOIN estadocotizacion AS ec ON c.idEstado = ec.idEstado ORDER BY ec.estado";
 
+						$sql = "SELECT * FROM cotizacion AS c INNER JOIN estadocotizacion AS ec ON c.idEstado = ec.idEstado WHERE idEmpleado =  '" . $_SESSION["user"]["idEmpleado"] . "'";
+            //  $sql2 = "SELECT * FROM cotizacion WHERE idEmpleado <>'" . $_SESSION["user"]["idEmpleado"] . "'";
+                 //echo $_SESSION["user"]["idEmpleado"];
 								$result = $dbconnection->query($sql);
 
 								if($result->rowCount() >0)
@@ -120,7 +122,7 @@
 										echo "<td>" . $fila["telefono"] . "</td>";
 										echo "<td>" . $fila["estado"] . "</td>";
 										echo "<td class='text-center'>";
-										echo "<a href='indexLogin.php?id=" . $fila["idCotizacion"] . "' class='btn btn-warning'><i class='fa fa-eye'></i> Visualizar</a> ";
+										echo "<a href='indexVendedor.php?id=" . $fila["idCotizacion"] . "' class='btn btn-warning'><i class='fa fa-eye'></i> Visualizar</a> ";
 										echo "</td>";
 										echo "</tr>";
 

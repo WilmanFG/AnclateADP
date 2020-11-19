@@ -54,9 +54,9 @@
 
             <ul class="header-links pull-left">
                 <li><a href="#"> <?php echo $_SESSION["user"]["cargo"];?></a></li>
-                <li><a href="indexLogin.php"> Ver Cotizaciones</a></li>
-                <li><a href="verEmpleados.php"> Ver Empleados</a></li>
-                <li><a href="verProductos.php"> Ver Productos</a></li>
+                <li><a href="indexAC.php"> Ver Cotizaciones</a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
 			</ul>
 
 
@@ -92,10 +92,36 @@
                                         <th scope="col">Correo</th>
                                         <th scope="col">Estado</th>
 										<th scope="col">Acciones</th>
+                    	<th scope="col">Vendedor</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
+                    <select name="codigo" onchange="" placeholder="-- Seleccionar Medicamento --"  autocomplete="off" required  class="form-control">
+            <option value="" disabled selected>-- Seleccionar Medicamento --</option>
+
+            <?php
+            include_once "classes/Database.class.php";
+
+            $database = new Database();
+            $dbconnection = $database->create_connection();
+
+              $sql = null;
+              $sql = "SELECT * FROM empleado AS e INNER JOIN estadoempleado AS ee ON e.idEstado = ee.idEstado ORDER BY ee.estado";
+
+                $result = $dbconnection->query($sql);
+              $query_obat = mysqli_query($con, "SELECT codigo, nombre FROM Medicamentos ORDER BY nombre ASC")
+                                                    or die('error '.mysqli_error($con));
+              while ($medi = mysqli_fetch_assoc($query_obat)) {
+                echo"<option value=\"$medi[codigo]\"> $medi[codigo] | $medi[nombre] </option>";
+              }
+
+            ?>
+
+
+
+
+          </select>
                                     <?php
 								include_once "classes/Database.class.php";
 
@@ -120,8 +146,9 @@
 										echo "<td>" . $fila["correoCliente"] . "</td>";
 										echo "<td>" . $fila["telefono"] . "</td>";
 										echo "<td>" . $fila["estado"] . "</td>";
+
 										echo "<td class='text-center'>";
-										echo "<a href='indexLogin.php?id=" . $fila["idCotizacion"] . "' class='btn btn-warning'><i class='fa fa-eye'></i> Visualizar</a> ";
+										echo "<a href='indexAC.php?id=" . $fila["idCotizacion"] . "' class='btn btn-warning'><i class='fa fa-eye'></i> Visualizar</a> ";
 										echo "</td>";
 										echo "</tr>";
 
