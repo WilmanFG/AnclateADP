@@ -193,11 +193,11 @@
 <!-- product -->
 <?php
     //Conexion
-<<<<<<< HEAD
-		$host = "localhost";
-=======
 
->>>>>>> ec6b2af5d01174791e190883d30d0ec2c36f4df8
+		$host = "localhost";
+
+
+
     $basededatos = "anclate";
     $usuariodb = "root";
     $clavedb = "";
