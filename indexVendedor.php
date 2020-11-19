@@ -93,6 +93,7 @@
 										<th scope="col">Acciones</th>
 									</tr>
 								</thead>
+
 								<tbody>
 									<tr>
                                     <?php
@@ -102,7 +103,7 @@
 								$dbconnection = $database->create_connection();
 
                                 $sql = null;
-
+                                //indexVendedor
 
 						$sql = "SELECT * FROM cotizacion AS c INNER JOIN estadocotizacion AS ec ON c.idEstado = ec.idEstado WHERE idEmpleado =  '" . $_SESSION["user"]["idEmpleado"] . "'";
             //  $sql2 = "SELECT * FROM cotizacion WHERE idEmpleado <>'" . $_SESSION["user"]["idEmpleado"] . "'";
