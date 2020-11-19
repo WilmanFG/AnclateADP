@@ -154,11 +154,11 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Sistemas de Ingeniería</a></li>
-						<li><a href="#">Altura</a></li>
-						<li><a href="#">Protección para Manos</a></li>
-						<li><a href="#">Protección Facial</a></li>
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="sisIngeniera.php">Sistemas de Ingeniería</a></li>
+						<li><a href="altura.php">Altura</a></li>
+						<li class="active"><a href="ppmanos.php">Protección para Manos</a></li>
+						<li><a href="ppfacial.php">Protección Facial</a></li>
 
 					</ul>
 					<!-- /NAV -->
@@ -193,7 +193,7 @@
 <!-- product -->
 <?php
     //Conexion
-		$host = "localhost:3308";
+    $host = "localhost:3308";
     $basededatos = "anclate";
     $usuariodb = "root";
     $clavedb = "";
@@ -203,7 +203,7 @@
         echo '<script language="javascript">alert("Error en la conexion de la BDD");</script>';
         exit();
     }else{
-    $query = mysqli_query($conexion,"SELECT * FROM producto AS p INNER JOIN tipoproducto AS tp ON p.idTipoProducto= tp.idTipoProducto INNER JOIN medida AS m ON p.idMedida = m.idMedida ORDER BY tp.tipoProducto");
+        $query = mysqli_query($conexion,"SELECT * FROM producto AS p INNER JOIN tipoproducto AS tp ON p.idTipoProducto= tp.idTipoProducto INNER JOIN medida AS m ON p.idMedida = m.idMedida WHERE p.idTipoProducto = '3' ");
     mysqli_close($conexion);
 
     $result = mysqli_num_rows($query);
@@ -217,7 +217,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-                            <img src="img/<?php echo $data["imagen"]?>" height="200" width="200"/>
+                            <img src="../img/<?php echo $data["imagen"]?>" height="200" width="200"/>
 								<div class="product-label">
 								</div>
 							</div>
@@ -275,10 +275,10 @@
 							<div class="footer">
 								<h3 class="footer-title">Categorias</h3>
 								<ul class="footer-links">
-									<li><a href="#">Sistema de Ingenieria</a></li>
-									<li><a href="#">Equipos de Altura</a></li>
-									<li><a href="#">Protección de Manos</a></li>
-									<li><a href="#">Protección Facial</a></li>
+									<li><a href="sisIngeniera.php">Sistema de Ingenieria</a></li>
+									<li><a href="altura.php">Equipos de Altura</a></li>
+									<li><a href="ppmanos.php">Protección de Manos</a></li>
+									<li><a href="ppfacial.php">Protección Facial</a></li>
 								</ul>
 							</div>
 						</div>

@@ -1,7 +1,7 @@
 <?php
     class Database
     {
-        const DBHOSTNAME = "localhost";
+        const DBHOSTNAME = "localhost:3308";
         const DBUSER = "root";
         const DBPASS = "";
         const DBDATABASE = "anclate";
@@ -21,7 +21,7 @@
             {
                 echo "Error en la conexión: ", $e->getMessage();
             }
-            
+
 
         }
 
