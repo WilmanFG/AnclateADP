@@ -1,7 +1,7 @@
 <?php
     class Database
     {
-        const DBHOSTNAME = "localhost:3308";
+        const DBHOSTNAME = "localhost";
         const DBUSER = "root";
         const DBPASS = "";
         const DBDATABASE = "anclate";
