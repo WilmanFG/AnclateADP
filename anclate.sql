@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 27-10-2020 a las 03:35:26
--- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.9
+-- Servidor: 127.0.0.1:3308
+-- Tiempo de generación: 19-11-2020 a las 02:59:51
+-- Versión del servidor: 8.0.18
+-- Versión de PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -27,10 +28,12 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `cargo`
 --
 
-CREATE TABLE `cargo` (
-  `idCargo` int(11) NOT NULL,
-  `cargo` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `cargo`;
+CREATE TABLE IF NOT EXISTS `cargo` (
+  `idCargo` int(11) NOT NULL AUTO_INCREMENT,
+  `cargo` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`idCargo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `cargo`
@@ -47,13 +50,17 @@ INSERT INTO `cargo` (`idCargo`, `cargo`) VALUES
 -- Estructura de tabla para la tabla `cotizacion`
 --
 
-CREATE TABLE `cotizacion` (
+DROP TABLE IF EXISTS `cotizacion`;
+CREATE TABLE IF NOT EXISTS `cotizacion` (
   `idCotizacion` char(10) NOT NULL,
   `nombreCliente` varchar(80) NOT NULL,
   `correoCliente` varchar(80) NOT NULL,
   `telefono` varchar(9) NOT NULL,
   `idEstado` int(11) NOT NULL,
-  `idEmpleado` char(10) DEFAULT NULL
+  `idEmpleado` char(10) DEFAULT NULL,
+  PRIMARY KEY (`idCotizacion`),
+  KEY `idEmpleado` (`idEmpleado`),
+  KEY `idEstado` (`idEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -62,7 +69,7 @@ CREATE TABLE `cotizacion` (
 
 INSERT INTO `cotizacion` (`idCotizacion`, `nombreCliente`, `correoCliente`, `telefono`, `idEstado`, `idEmpleado`) VALUES
 ('COT001', 'Critian Pérez ', 'cliente01@gmail.com', '2255-8811', 2, 'EMP02'),
-('COT002', 'Axel Rivas', 'cliente02@gmail.com', '2255-6633', 1, NULL);
+('COT002', 'Axel Rivas', 'cliente02@gmail.com', '2255-6633', 1, 'EMP04');
 
 -- --------------------------------------------------------
 
@@ -70,10 +77,13 @@ INSERT INTO `cotizacion` (`idCotizacion`, `nombreCliente`, `correoCliente`, `tel
 -- Estructura de tabla para la tabla `cotizacionproducto`
 --
 
-CREATE TABLE `cotizacionproducto` (
+DROP TABLE IF EXISTS `cotizacionproducto`;
+CREATE TABLE IF NOT EXISTS `cotizacionproducto` (
   `idCotizacion` varchar(10) NOT NULL,
   `idProducto` varchar(25) NOT NULL,
-  `cantidad` int(11) NOT NULL
+  `cantidad` int(11) NOT NULL,
+  KEY `idCotizacion` (`idCotizacion`),
+  KEY `idProducto` (`idProducto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -90,7 +100,8 @@ INSERT INTO `cotizacionproducto` (`idCotizacion`, `idProducto`, `cantidad`) VALU
 -- Estructura de tabla para la tabla `empleado`
 --
 
-CREATE TABLE `empleado` (
+DROP TABLE IF EXISTS `empleado`;
+CREATE TABLE IF NOT EXISTS `empleado` (
   `idEmpleado` char(10) NOT NULL,
   `nombres` varchar(80) NOT NULL,
   `apellidos` varchar(80) NOT NULL,
@@ -99,7 +110,11 @@ CREATE TABLE `empleado` (
   `dui` varchar(10) NOT NULL,
   `idCargo` int(11) NOT NULL,
   `idEstadoEmpleado` int(11) NOT NULL,
-  `contra` varchar(60) NOT NULL
+  `contra` varchar(60) NOT NULL,
+  PRIMARY KEY (`idEmpleado`),
+  UNIQUE KEY `dui` (`dui`),
+  KEY `idCargo` (`idCargo`),
+  KEY `idEstadoEmpleado` (`idEstadoEmpleado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -118,9 +133,11 @@ INSERT INTO `empleado` (`idEmpleado`, `nombres`, `apellidos`, `telefono`, `corre
 -- Estructura de tabla para la tabla `estadocotizacion`
 --
 
-CREATE TABLE `estadocotizacion` (
+DROP TABLE IF EXISTS `estadocotizacion`;
+CREATE TABLE IF NOT EXISTS `estadocotizacion` (
   `idEstado` int(11) NOT NULL,
-  `estado` varchar(30) NOT NULL
+  `estado` varchar(30) NOT NULL,
+  PRIMARY KEY (`idEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -138,9 +155,11 @@ INSERT INTO `estadocotizacion` (`idEstado`, `estado`) VALUES
 -- Estructura de tabla para la tabla `estadoempleado`
 --
 
-CREATE TABLE `estadoempleado` (
+DROP TABLE IF EXISTS `estadoempleado`;
+CREATE TABLE IF NOT EXISTS `estadoempleado` (
   `idEstadoEmpleado` int(11) NOT NULL,
-  `estadoEmpleado` varchar(30) NOT NULL
+  `estadoEmpleado` varchar(30) NOT NULL,
+  PRIMARY KEY (`idEstadoEmpleado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -158,9 +177,11 @@ INSERT INTO `estadoempleado` (`idEstadoEmpleado`, `estadoEmpleado`) VALUES
 -- Estructura de tabla para la tabla `medida`
 --
 
-CREATE TABLE `medida` (
+DROP TABLE IF EXISTS `medida`;
+CREATE TABLE IF NOT EXISTS `medida` (
   `idMedida` int(11) NOT NULL,
-  `medida` varchar(25) NOT NULL
+  `medida` varchar(25) NOT NULL,
+  PRIMARY KEY (`idMedida`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -177,14 +198,18 @@ INSERT INTO `medida` (`idMedida`, `medida`) VALUES
 -- Estructura de tabla para la tabla `producto`
 --
 
-CREATE TABLE `producto` (
+DROP TABLE IF EXISTS `producto`;
+CREATE TABLE IF NOT EXISTS `producto` (
   `idProducto` varchar(25) NOT NULL,
   `nombre` varchar(80) NOT NULL,
   `descripcion` varchar(100) NOT NULL,
   `imagen` varchar(150) DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
   `idTipoProducto` int(11) DEFAULT NULL,
-  `idMedida` int(11) NOT NULL
+  `idMedida` int(11) NOT NULL,
+  PRIMARY KEY (`idProducto`),
+  KEY `idMedida` (`idMedida`),
+  KEY `idTipoProducto` (`idTipoProducto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -192,7 +217,11 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`idProducto`, `nombre`, `descripcion`, `imagen`, `stock`, `idTipoProducto`, `idMedida`) VALUES
-('PROD01', 'Guantes', 'Guantes para trabajar', 'gloves.jpg', 20, 3, 2),
+('HRA-7081', 'ARNES EN H DE 3 PUNTOS', 'Arnes en h de 3 puntos con acolchonamientos y soporte lumbar', 'arnes-multiproposito-dielectrico-con-soporte-lumbar-en-h-de-4-puntos-de-anclaje-tipo-d-dinamik.jpg', 5, 2, 1),
+('HREA-795', 'SISTEMAS CERTIFICADOS.', 'Sistemas certificados instalados sobre techo', 'sisInge.jpg', 1, 1, 1),
+('HRF-3600', 'LENTE DE PROTECCION CARIBU.', 'Lente de proteccion caribu, aro negro,disponible en claros y oscuros.', 'lentes.jpg', 2, 4, 1),
+('HRG-4833', 'GUANTE TEJIDO DE NYLON.', 'Guante tejido de nylon con recubrimiento de latex espumado ironwear', 'guante.jpg', 5, 3, 2),
+('PROD01', 'Guantes', 'Guantes para trabajar', 'gloves.jpg', 21, 1, 1),
 ('PROD02', 'Guantes Rojos', 'Guantes para trabajar color rojos', 'altura.png', 30, 1, 1);
 
 -- --------------------------------------------------------
@@ -201,10 +230,12 @@ INSERT INTO `producto` (`idProducto`, `nombre`, `descripcion`, `imagen`, `stock`
 -- Estructura de tabla para la tabla `tipoproducto`
 --
 
-CREATE TABLE `tipoproducto` (
-  `idTipoProducto` int(11) NOT NULL,
-  `tipoProducto` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `tipoproducto`;
+CREATE TABLE IF NOT EXISTS `tipoproducto` (
+  `idTipoProducto` int(11) NOT NULL AUTO_INCREMENT,
+  `tipoProducto` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`idTipoProducto`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tipoproducto`
@@ -215,88 +246,6 @@ INSERT INTO `tipoproducto` (`idTipoProducto`, `tipoProducto`) VALUES
 (2, 'Altura'),
 (3, 'Protección para manos'),
 (4, 'Protección facial');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `cargo`
---
-ALTER TABLE `cargo`
-  ADD PRIMARY KEY (`idCargo`);
-
---
--- Indices de la tabla `cotizacion`
---
-ALTER TABLE `cotizacion`
-  ADD PRIMARY KEY (`idCotizacion`),
-  ADD KEY `idEmpleado` (`idEmpleado`),
-  ADD KEY `idEstado` (`idEstado`);
-
---
--- Indices de la tabla `cotizacionproducto`
---
-ALTER TABLE `cotizacionproducto`
-  ADD KEY `idCotizacion` (`idCotizacion`),
-  ADD KEY `idProducto` (`idProducto`);
-
---
--- Indices de la tabla `empleado`
---
-ALTER TABLE `empleado`
-  ADD PRIMARY KEY (`idEmpleado`),
-  ADD UNIQUE KEY `dui` (`dui`),
-  ADD KEY `idCargo` (`idCargo`),
-  ADD KEY `idEstadoEmpleado` (`idEstadoEmpleado`);
-
---
--- Indices de la tabla `estadocotizacion`
---
-ALTER TABLE `estadocotizacion`
-  ADD PRIMARY KEY (`idEstado`);
-
---
--- Indices de la tabla `estadoempleado`
---
-ALTER TABLE `estadoempleado`
-  ADD PRIMARY KEY (`idEstadoEmpleado`);
-
---
--- Indices de la tabla `medida`
---
-ALTER TABLE `medida`
-  ADD PRIMARY KEY (`idMedida`);
-
---
--- Indices de la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD PRIMARY KEY (`idProducto`),
-  ADD KEY `idMedida` (`idMedida`),
-  ADD KEY `idTipoProducto` (`idTipoProducto`);
-
---
--- Indices de la tabla `tipoproducto`
---
-ALTER TABLE `tipoproducto`
-  ADD PRIMARY KEY (`idTipoProducto`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `cargo`
---
-ALTER TABLE `cargo`
-  MODIFY `idCargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `tipoproducto`
---
-ALTER TABLE `tipoproducto`
-  MODIFY `idTipoProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
