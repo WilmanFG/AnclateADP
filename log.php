@@ -81,6 +81,9 @@
                                     <label for="contra">Contraseña:</label>
                                     <input type="password" class="form-control" id="contra" name="contra">
                                 </div>
+                                <div class="form-group">
+                                    <a href="recuperar.php">Recuperar contraseña!</a>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Enviar</button>
                             </form>
                         </div>
