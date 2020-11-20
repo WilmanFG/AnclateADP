@@ -3,7 +3,16 @@
 
     if(!isset($_SESSION["user"])){
         header("location:log.php");
-    }
+	}
+	if($_SESSION["user"]["cargo"]!=$_SESSION["Administrador"]){
+        header("location:log.php");
+    }else{
+		if($_SESSION["user"]["cargo"]==$_SESSION["Atención al cliente"]){
+			header("location:indexAC.php");
+		}else{
+			header("location:indexVendedor.php");
+		}
+	}
 
 ?>
 <!DOCTYPE html>
@@ -247,9 +256,7 @@
 							
 							
 						</div>
-						<div class="section-title text-center">
-							<button type="button" class="btn btn-primary btn-lg btn-block">Finalizar cotización</button>
-						</div>
+					
 					</div>
 					<!-- /Order Details -->
 				</div>

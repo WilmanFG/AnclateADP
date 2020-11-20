@@ -3,7 +3,16 @@
 
     if(!isset($_SESSION["user"])){
         header("location:log.php");
-    }
+	}
+	if($_SESSION["user"]["cargo"]!=$_SESSION["Atención al cliente"]){
+        header("location:log.php");
+    }else{
+		if($_SESSION["user"]["cargo"]==$_SESSION["Administrador"]){
+			header("location:indexLogin.php");
+		}else{
+			header("location:indexVendedor.php");
+		}
+	}
 
 ?>
 <!DOCTYPE html>
