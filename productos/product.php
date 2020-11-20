@@ -193,7 +193,7 @@
 <!-- product -->
 <?php
     //Conexion
-		$host = "localhost:3308";
+		$host = "localhost:3306";
     $basededatos = "anclate";
     $usuariodb = "root";
     $clavedb = "";
