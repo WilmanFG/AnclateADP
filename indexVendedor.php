@@ -4,15 +4,9 @@
       if(!isset($_SESSION["user"])){
         header("location:log.php");
 	}
-	if($_SESSION["user"]["cargo"]!=$_SESSION["Vendedor"]){
-        header("location:log.php");
-    }else{
-		if($_SESSION["user"]["cargo"]==$_SESSION["Administrador"]){
-			header("location:indexAC.php");
-		}else{
-			header("location:indexAC.php");
-		}
-	}
+	
+		
+	
 
 ?>
 <!DOCTYPE html>
