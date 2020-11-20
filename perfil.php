@@ -276,10 +276,10 @@
                                 echo "indexLogin.php";
                                 break;
                             case "Atención al cliente":
-                                echo "ESCRIBIR DIRECCION DE INDEX CLIENTE";
+                                echo "indexAC.php";
                                 break;
                             case "Vendedor":
-                                echo "ESCRIBIR DIRECCION DE INDEX VENDEDOR";
+                                echo "indexVendedor.php";
                                 break;
 
                         }
